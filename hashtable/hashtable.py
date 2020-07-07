@@ -23,6 +23,11 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        if capacity < MIN_CAPACITY:
+            self.capacity = MIN_CAPACITY
+        else:
+            self.capacity = capacity
+        self.storage = [None] * self.capacity
 
 
 
@@ -36,6 +41,7 @@ class HashTable:
 
         Implement this.
         """
+        return self.capacity
         # Your code here
 
 
@@ -65,6 +71,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for letter in key:
+            hash = (( hash << 5) + hash) + ord(letter)
+        return hash & 0xFFFFFFFF
 
 
     def hash_index(self, key):
@@ -83,6 +93,8 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        self.storage[index] = HashTableEntry(key, value)
         # Your code here
 
 
@@ -94,6 +106,12 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        cur = self.storage[index]
+        if cur is None:
+            print("Key was not found")
+        else:
+            self.storage[index] = None
         # Your code here
 
 
@@ -105,6 +123,12 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        cur = self.storage[index]
+        if cur is None:
+            print("Key was not found")
+        else:
+            return cur.value
         # Your code here
 
 
