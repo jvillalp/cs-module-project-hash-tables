@@ -74,7 +74,7 @@ class HashTable:
         hash = 5381
         for letter in key:
             hash = (( hash << 5) + hash) + ord(letter)
-        return hash & 0xFFFFFFFF
+        return hash & 0xFFFFFFFF 
 
 
     def hash_index(self, key):
@@ -94,7 +94,19 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        self.storage[index] = HashTableEntry(key, value)
+        cur = self.storage[index]
+        if cur is None:
+            self.storage[index] = HashTableEntry(key, value)
+        else:
+            while cur.next is not None:
+                if cur.key == key:
+                    cur.value = value
+                    return
+                cur = cur.next
+            if cur.key == key:
+                cur.value = value
+                return
+            cur.next = HashTableEntry(key, value)
         # Your code here
 
 
@@ -108,11 +120,24 @@ class HashTable:
         """
         index = self.hash_index(key)
         cur = self.storage[index]
-        if cur is None:
-            print("Key was not found")
-        else:
-            self.storage[index] = None
-        # Your code here
+        if cur is not None:
+            if cur.key == key:
+                if cur.next is None:
+                    self.storage[index] = None
+                    return
+                else:
+                    self.storage[index] = cur.next
+                    return
+            prev = cur
+            cur = cur.next
+            while cur != None:
+                if cur.key == key:
+                    prev.next = cur.next
+                    return
+                cur = cur.next
+                prev = prev.next
+        print("Key was not found")
+
 
 
     def get(self, key):
@@ -125,10 +150,12 @@ class HashTable:
         """
         index = self.hash_index(key)
         cur = self.storage[index]
-        if cur is None:
-            print("Key was not found")
-        else:
-            return cur.value
+        if cur is not None:
+            while cur != None:
+                if cur.key == key:
+                    return cur.value
+                cur = cur.next
+        print("Key was not found")
         # Your code here
 
 
@@ -140,6 +167,17 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        tmp = self.storage
+        self.__init__(new_capacity)
+        self.storage = [None] * self.capacity
+        for item in tmp:
+            if item is not None:
+                while item is not None:
+                    self.put(item.key, item.value)
+                    item = item.next
+        
+
+
 
 
 
