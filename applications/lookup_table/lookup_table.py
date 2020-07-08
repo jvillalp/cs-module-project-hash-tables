@@ -1,5 +1,8 @@
 # Your code here
 import math
+import random
+
+lookup ={}
 
 def slowfun_too_slow(x, y):
     v = math.pow(x, y)
@@ -15,8 +18,20 @@ def slowfun(x, y):
     output, but completes quickly instead of taking ages to run.
     """
     # Your code here
-    
+    # for i in range(1, 1000):
+    #     lookup_table[i] = slowfun_too_slow(x, y)
 
+    # print(lookup_table[2])
+
+    if (x, y) in lookup:
+        return lookup[(x, y)]
+    else:
+        v = math.pow(x, y)
+        v = math.factorial(v)
+        v //= (x + y)
+        v %= 982451653
+        lookup[(x, y)] = v
+        return v
 
 
 # Do not modify below this line!
