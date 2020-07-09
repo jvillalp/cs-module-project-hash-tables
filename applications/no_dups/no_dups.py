@@ -1,5 +1,14 @@
 def no_dups(s):
     # Your code here
+    words = s.split()
+    visited = set()
+    res = []
+    for word in words:
+        if word not in visited:
+            res.append(word)
+            visited.add(word)
+    return " ".join(res)
+
 
 
 

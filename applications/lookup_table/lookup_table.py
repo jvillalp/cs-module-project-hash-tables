@@ -2,7 +2,7 @@
 import math
 import random
 
-lookup ={}
+lookup_table ={}
 
 def slowfun_too_slow(x, y):
     v = math.pow(x, y)
@@ -23,14 +23,14 @@ def slowfun(x, y):
 
     # print(lookup_table[2])
 
-    if (x, y) in lookup:
-        return lookup[(x, y)]
+    if (x, y) in lookup_table:
+        return lookup_table[(x, y)]
     else:
         v = math.pow(x, y)
         v = math.factorial(v)
         v //= (x + y)
         v %= 982451653
-        lookup[(x, y)] = v
+        lookup_table[(x, y)] = v
         return v
 
 

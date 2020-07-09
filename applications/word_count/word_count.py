@@ -1,7 +1,17 @@
 def word_count(s):
     # Your code here
-
-
+    for char in "\":;,.-+=/\|[]{}()*^&":
+        s = s.replace(char, "")
+    
+    words = s.split()
+    res = {}
+    for word in words:
+        w = word.lower()
+        if w in res:
+            res[w] += 1
+        else:
+            res[w] = 1
+    return res
 
 if __name__ == "__main__":
     print(word_count(""))
