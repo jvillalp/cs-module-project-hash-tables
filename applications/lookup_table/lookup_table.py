@@ -17,11 +17,6 @@ def slowfun(x, y):
     Rewrite slowfun_too_slow() in here so that the program produces the same
     output, but completes quickly instead of taking ages to run.
     """
-    # Your code here
-    # for i in range(1, 1000):
-    #     lookup_table[i] = slowfun_too_slow(x, y)
-
-    # print(lookup_table[2])
 
     if (x, y) in lookup_table:
         return lookup_table[(x, y)]
