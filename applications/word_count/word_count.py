@@ -1,7 +1,21 @@
 def word_count(s):
     # Your code here
-
-
+    #replace unwanted char with " "
+    for char in "\":;,.-+=/\|[]{}()*^&":
+        s = s.replace(char, "")
+    
+    words = s.split()
+    res = {}
+    for word in words:
+        #make sure it accepts upper and lower
+        w = word.lower()
+        if w in res:
+            #word count if word already exists
+            res[w] += 1
+        else:
+            #add more if new word not in dic 
+            res[w] = 1
+    return res
 
 if __name__ == "__main__":
     print(word_count(""))

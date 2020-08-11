@@ -20,8 +20,16 @@ class HashTable:
     Implement this.
     """
 
+
     def __init__(self, capacity):
         # Your code here
+        if capacity < MIN_CAPACITY:
+            self.capacity = MIN_CAPACITY
+        else:
+            self.capacity = capacity
+        self.storage = [None] * self.capacity
+        self.count = 0
+
 
 
     def get_num_slots(self):
@@ -34,6 +42,7 @@ class HashTable:
 
         Implement this.
         """
+        return self.capacity
         # Your code here
 
 
@@ -43,7 +52,9 @@ class HashTable:
 
         Implement this.
         """
+        return float(self.count)/self.capacity
         # Your code here
+        
 
 
     def fnv1(self, key):
@@ -63,6 +74,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for letter in key:
+            hash = (( hash << 5) + hash) + ord(letter)
+        return hash & 0xFFFFFFFF 
 
 
     def hash_index(self, key):
@@ -81,6 +96,26 @@ class HashTable:
 
         Implement this.
         """
+
+        if self.get_load_factor() > 0.6:
+            self.resize(self.capacity*2)
+        index = self.hash_index(key)
+        cur = self.storage[index]
+        if cur is None:
+            self.count += 1
+            self.storage[index] = HashTableEntry(key, value)
+        else:
+            while cur.next is not None:
+                if cur.key == key:
+                    cur.value = value
+                    return
+                cur = cur.next
+            if cur.key == key:
+                cur.value = value
+                return
+            cur.next = HashTableEntry(key, value)
+            self.count += 1
+
         # Your code here
 
 
@@ -92,7 +127,29 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        index = self.hash_index(key)
+        cur = self.storage[index]
+        if cur is not None:
+            if cur.key == key:
+                if cur.next is None:
+                    self.count -= 1
+                    self.storage[index] = None
+                    return
+                else:
+                    self.count -= 1
+                    self.storage[index] = cur.next
+                    return
+            prev = cur
+            cur = cur.next
+            while cur != None:
+                if cur.key == key:
+                    self.count -= 1
+                    prev.next = cur.next
+                    return
+                cur = cur.next
+                prev = prev.next
+        print("Key was not found")
+
 
 
     def get(self, key):
@@ -103,6 +160,14 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        cur = self.storage[index]
+        if cur is not None:
+            while cur != None:
+                if cur.key == key:
+                    return cur.value
+                cur = cur.next
+        print("Key was not found")
         # Your code here
 
 
@@ -114,12 +179,25 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        tmp = self.storage
+        self.__init__(new_capacity)
+        self.storage = [None] * self.capacity
+        for item in tmp:
+            if item is not None:
+                while item is not None:
+                    self.put(item.key, item.value)
+                    item = item.next
+        
+
+
 
 
 
 if __name__ == "__main__":
     ht = HashTable(8)
-
+    # print(ht.storage)
+    # for i in range(1000):
+    #     ht.put("line_" + str(i), "hello")
     ht.put("line_1", "'Twas brillig, and the slithy toves")
     ht.put("line_2", "Did gyre and gimble in the wabe:")
     ht.put("line_3", "All mimsy were the borogoves,")
@@ -132,7 +210,8 @@ if __name__ == "__main__":
     ht.put("line_10", "Long time the manxome foe he sought--")
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
-
+    # print(ht.storage)
+    # print(len(ht.storage))
     print("")
 
     # Test storing beyond capacity
